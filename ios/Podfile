@@ -10,6 +10,14 @@ target 'Task1' do
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
+  pod 'react-native-webview', :path => '../node_modules/react-native-webview'
+
+  pod 'react-native-slider', :path => '../node_modules/@react-native-community/slider'
+
+  pod 'RNReanimated', :path => '../node_modules/react-native-reanimated'
+
+  pod 'react-native-orientation', :path => '../node_modules/react-native-orientation'
+
   target 'Task1Tests' do
     inherit! :complete
     # Pods for testing

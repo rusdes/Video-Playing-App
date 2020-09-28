@@ -4,7 +4,6 @@ import {BottomNavigation, Text} from 'react-native-paper';
 import Profile from './profile/profile';
 import SearchPage from './search_page/search_page';
 import Favourites from './favourites/favourites';
-import {Children} from 'react';
 
 export default function Nav() {
   const [index, setIndex] = React.useState(0);

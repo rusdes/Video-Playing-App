@@ -12,14 +12,20 @@ import {
   ActivityIndicator,
   FlatList,
 } from 'react-native';
-
+import {useNavigation} from '@react-navigation/native';
+import ListItem from './list_view';
 import api_call from '../../../api_call';
 
-export default class SearchPage extends Component {
+class SearchPage extends Component {
+  constructor(props) {
+    super(props);
+  }
+
   state = {
     query: '',
     videos: [],
     selectedVideo: null,
+    loading: false,
   };
 
   onChangeSearch = (text) => {
@@ -27,6 +33,9 @@ export default class SearchPage extends Component {
   };
 
   searchYT = async () => {
+    this.setState({
+      loading: true,
+    });
     const response = await api_call.get('./search', {
       params: {
         q: this.state.query,
@@ -34,11 +43,18 @@ export default class SearchPage extends Component {
     });
     this.setState({
       videos: response.data.items,
+      loading: false,
     });
-    console.log(this.state.videos);
+    //console.log(this.state.videos);
+  };
+
+  playVideo = (x) => {
+    console.log(x);
+    //navigation.navigate('Video');
   };
 
   render() {
+    const {navigation} = this.props;
     return (
       <View style={styles.container}>
         <Appbar.Header>
@@ -50,6 +66,33 @@ export default class SearchPage extends Component {
           value={this.state.query}
           onBlur={this.searchYT}
         />
+        {this.state.videos.length === 0 ? (
+          <View />
+        ) : this.state.loading === false ? (
+          <FlatList
+            data={this.state.videos}
+            renderItem={({item}) => {
+              console.log(item.id.videoId);
+              return (
+                <ListItem
+                  key={item.etag}
+                  item1={item}
+                  onPress={(x, y) =>
+                    navigation.navigate('Video', {
+                      Title: x,
+                      videoId: y,
+                    })
+                  }
+                />
+              );
+            }}
+            keyExtractor={(item) => item.etag}
+          />
+        ) : (
+          <View style={styles.spinner}>
+            <ActivityIndicator size="large" color="#0000ff" />
+          </View>
+        )}
       </View>
     );
   }
@@ -59,4 +102,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  spinner: {
+    flex: 1,
+    flexDirection: 'column',
+    alignContent: 'center',
+    justifyContent: 'center',
+  },
 });
+
+export default function (props) {
+  const navigation = useNavigation();
+
+  return <SearchPage {...props} navigation={navigation} />;
+}

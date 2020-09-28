@@ -122,7 +122,7 @@ export default class SignUp extends Component {
           style={styles.loginBtn}
           onPress={this.onLogIn}
           color="#fb5b5a">
-          <Text style={styles.loginText}>LOG IN</Text>
+          <Text style={styles.loginText}>Log In</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
