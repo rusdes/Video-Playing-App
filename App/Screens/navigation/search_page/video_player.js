@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
-import {Appbar, TextInput, Button, Searchbar} from 'react-native-paper';
-import {Platform, StyleSheet, Text, View} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import {WebView} from 'react-native-webview';
+import {Appbar, Button} from 'react-native-paper';
+import {StyleSheet, Text, View} from 'react-native';
 import {KEY} from '../../../api_call';
 import YouTube from 'react-native-youtube';
 
@@ -71,9 +69,3 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
 });
-
-// export default function (props) {
-//   const navigation = useNavigation();
-
-//   return <VideoPlayer {...props} navigation={navigation} />;
-// }

@@ -10,7 +10,9 @@ import {
 import {Appbar, TextInput, HelperText, RadioButton} from 'react-native-paper';
 import AsyncStorage from '@react-native-community/async-storage';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import {NavigationContainer} from '@react-navigation/native';
+// import {firebase} from '../../firebase_config';
+import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 
 const date = 0;
 const dateDisplay = new Date();
@@ -23,6 +25,7 @@ export default class SignUp extends Component {
     password: '',
     gender: '',
     birth_date: this.getParsedDate(date),
+    picture: '',
     showDate: false,
   };
 
@@ -43,6 +46,7 @@ export default class SignUp extends Component {
     }
     return true;
   };
+
   hasErrors = () => {
     return false;
   };
@@ -57,6 +61,7 @@ export default class SignUp extends Component {
     }
     return true;
   };
+
   hasErrors = () => {
     return false;
   };
@@ -98,9 +103,37 @@ export default class SignUp extends Component {
     }
   };
 
+  onRegisterPress = () => {
+    auth()
+      .createUserWithEmailAndPassword(this.state.email, this.state.password)
+      .then((response) => {
+        const uid = response.user.uid;
+
+        let account = {};
+        account.id = response.user.uid;
+        account.gender = this.state.gender;
+        account.birth_date = this.state.birth_date;
+        account.name = this.state.name;
+        account.password = this.state.password;
+        account.email = this.state.email.toLowerCase();
+        account.picture = this.state.picture;
+
+        const usersRef = firestore().collection('users');
+        usersRef
+          .doc(uid)
+          .set(account)
+          .then(this.props.navigation.navigate('LogIn', {uid: uid}))
+          .catch((error) => {
+            alert(error);
+          })
+          .catch((error) => {
+            alert(error);
+          });
+      });
+  };
+
   onSignUp = () => {
-    this.saveSignUp();
-    this.props.navigation.navigate('LogIn');
+    this.onRegisterPress();
   };
 
   render() {

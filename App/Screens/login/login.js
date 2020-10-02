@@ -1,16 +1,9 @@
 import React, {Component} from 'react';
-import {
-  View,
-  StyleSheet,
-  Keyboard,
-  Button,
-  TouchableOpacity,
-  Text,
-} from 'react-native';
-import {Appbar, TextInput, HelperText, RadioButton} from 'react-native-paper';
+import {View, StyleSheet, TouchableOpacity, Text} from 'react-native';
+import {TextInput, HelperText} from 'react-native-paper';
 import AsyncStorage from '@react-native-community/async-storage';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import {NavigationContainer} from '@react-navigation/native';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 
 let correct = true;
 let details;
@@ -87,6 +80,32 @@ export default class SignUp extends Component {
     }
   };
 
+  onLoginPress = () => {
+    auth()
+      .signInWithEmailAndPassword(this.state.email, this.state.password)
+      .then((response) => {
+        const uid = response.user.uid;
+        const usersRef = firestore().collection('users');
+        usersRef
+          .doc(uid)
+          .get()
+          .then((firestoreDocument) => {
+            if (!firestoreDocument.exists) {
+              alert('User does not exist anymore.');
+              return;
+            }
+            const user = firestoreDocument.data();
+            this.props.navigation.navigate('Navigation');
+          })
+          .catch((error) => {
+            alert(error);
+          });
+      })
+      .catch((error) => {
+        alert(error);
+      });
+  };
+
   render() {
     return (
       <View style={styles.container}>
@@ -120,7 +139,7 @@ export default class SignUp extends Component {
         </HelperText>
         <TouchableOpacity
           style={styles.loginBtn}
-          onPress={this.onLogIn}
+          onPress={this.onLoginPress}
           color="#fb5b5a">
           <Text style={styles.loginText}>Log In</Text>
         </TouchableOpacity>

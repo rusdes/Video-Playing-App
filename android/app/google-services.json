@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "372911636364",
+    "firebase_url": "https://yt-player-second.firebaseio.com",
+    "project_id": "yt-player-second",
+    "storage_bucket": "yt-player-second.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:372911636364:android:2fa19eb0642fd2a9d3a0a9",
+        "android_client_info": {
+          "package_name": "com.task1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "372911636364-b303iajonbnu3ib0i8j4adrunm9905np.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCvc57cWMF7AQivRVUC512KV5qCF7R7Fc4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "372911636364-b303iajonbnu3ib0i8j4adrunm9905np.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
