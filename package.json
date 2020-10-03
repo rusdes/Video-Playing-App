@@ -1,5 +1,5 @@
 {
-  "name": "Task1",
+  "name": "task1",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -29,6 +29,7 @@
     "react-native": "0.63.2",
     "react-native-datepicker": "^1.7.2",
     "react-native-gesture-handler": "^1.8.0",
+    "react-native-image-picker": "^2.3.4",
     "react-native-orientation": "^3.1.3",
     "react-native-paper": "^4.2.0",
     "react-native-reanimated": "^1.13.1",
@@ -51,5 +52,21 @@
   },
   "jest": {
     "preset": "react-native"
-  }
+  },
+  "description": "Video Player App",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rusdes/Video-Playing-App.git"
+  },
+  "keywords": [
+    "react",
+    "native"
+  ],
+  "author": "Rushil Desai",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rusdes/Video-Playing-App/issues"
+  },
+  "homepage": "https://github.com/rusdes/Video-Playing-App#readme"
 }

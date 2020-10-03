@@ -1,18 +1,12 @@
 import React, {Component} from 'react';
-import {
-  View,
-  StyleSheet,
-  Keyboard,
-  Button,
-  TouchableOpacity,
-  Text,
-} from 'react-native';
-import {Appbar, TextInput, HelperText, RadioButton} from 'react-native-paper';
+import {View, StyleSheet, Keyboard, TouchableOpacity, Text} from 'react-native';
+import {TextInput, HelperText, RadioButton, Avatar} from 'react-native-paper';
 import AsyncStorage from '@react-native-community/async-storage';
 import DateTimePicker from '@react-native-community/datetimepicker';
 // import {firebase} from '../../firebase_config';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
+import ImagePicker from 'react-native-image-picker';
 
 const date = 0;
 const dateDisplay = new Date();
@@ -136,11 +130,44 @@ export default class SignUp extends Component {
     this.onRegisterPress();
   };
 
+  options2 = {
+    title: 'Select Picture',
+    mediaType: 'photo',
+    quality: 1,
+  };
+
+  selectPicture = () => {
+    ImagePicker.showImagePicker(this.options2, (response) => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ');
+      } else if (response.customButton) {
+        console.log('User tapped custom button: ');
+      } else {
+        const source = {uri: response.uri};
+        this.setState({picture: source});
+        console.log(this.state.picture);
+      }
+    });
+  };
+
   render() {
     return (
       <View style={styles.container}>
         <Text style={styles.logo}>Sign Up</Text>
-
+        <TouchableOpacity
+          style={styles.profilePicture}
+          onPress={this.selectPicture}>
+          {this.state.picture === '' ? (
+            <Avatar.Image
+              size={140}
+              source={require('./profile_picture_icon.png')}
+            />
+          ) : (
+            <Avatar.Image size={140} source={this.state.picture} />
+          )}
+        </TouchableOpacity>
         <View style={styles.inputGender}>
           <RadioButton.Group
             onValueChange={(value) => this.setState({gender: value})}
@@ -307,5 +334,12 @@ const styles = StyleSheet.create({
   },
   loginText: {
     color: 'white',
+  },
+  profilePicture: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 80,
+    width: 80,
+    borderRadius: 40,
   },
 });
