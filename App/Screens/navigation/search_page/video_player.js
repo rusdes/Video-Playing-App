@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Appbar, Button} from 'react-native-paper';
+import {Appbar, Button, IconButton, Colors} from 'react-native-paper';
 import {StyleSheet, Text, View} from 'react-native';
 import {KEY} from '../../../api_call';
 import YouTube from 'react-native-youtube';
@@ -8,13 +8,16 @@ export default class VideoPlayer extends Component {
   constructor(props) {
     super(props);
   }
+
+  state = {
+    fav: true,
+  };
+
   render() {
     const {navigation} = this.props;
     const {videoId, Title} = this.props.route.params;
-    console.log('Title ');
-    console.log(KEY);
     return (
-      <View style={styles.container}>
+      <View style={[{backgroundColor: '#929292'}, styles.container]}>
         <Appbar.Header>
           <Appbar.Content title="Video Player" />
         </Appbar.Header>
@@ -33,6 +36,29 @@ export default class VideoPlayer extends Component {
         </View>
         <View style={styles.textContainer}>
           <Text style={styles.text}>{Title}</Text>
+        </View>
+        <View style={styles.container}>
+          {this.state.fav ? (
+            <IconButton
+              style={styles.fav_button}
+              icon="heart"
+              color={Colors.red400}
+              size={60}
+              onPress={() => {
+                this.setState({fav: false});
+              }}
+            />
+          ) : (
+            <IconButton
+              style={styles.fav_button}
+              icon="heart"
+              color={Colors.white}
+              size={60}
+              onPress={() => {
+                this.setState({fav: true});
+              }}
+            />
+          )}
         </View>
         <Button
           icon="arrow-left-box"
@@ -62,10 +88,14 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     padding: 20,
+    paddingTop: 0,
   },
   button: {
     position: 'absolute',
     bottom: 40,
+    alignSelf: 'center',
+  },
+  fav_button: {
     alignSelf: 'center',
   },
 });

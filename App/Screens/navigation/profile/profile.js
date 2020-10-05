@@ -36,6 +36,7 @@ export default class Profile extends Component {
         this.setState({user: data});
       })
       .then(() => {
+        console.log('data: ' + this.state.user);
         if (this.state.profileImageUrl === '') {
           let imageRef = storage().ref('/' + uid + '/profile_pic');
           imageRef

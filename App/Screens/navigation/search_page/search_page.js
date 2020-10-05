@@ -1,17 +1,12 @@
 import React, {Component} from 'react';
-import {Appbar, TextInput, Button, Searchbar} from 'react-native-paper';
 import {
-  PermissionsAndroid,
-  Platform,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-  Image,
+  Appbar,
+  TextInput,
   ActivityIndicator,
-  FlatList,
-} from 'react-native';
+  Colors,
+  Searchbar,
+} from 'react-native-paper';
+import {StyleSheet, View, FlatList} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import ListItem from './list_view';
 import api_call from '../../../api_call';
@@ -19,6 +14,10 @@ import api_call from '../../../api_call';
 class SearchPage extends Component {
   constructor(props) {
     super(props);
+  }
+
+  componentDidMount() {
+    this.searchYT();
   }
 
   state = {
@@ -48,11 +47,6 @@ class SearchPage extends Component {
     //console.log(this.state.videos);
   };
 
-  playVideo = (x) => {
-    console.log(x);
-    //navigation.navigate('Video');
-  };
-
   render() {
     const {navigation} = this.props;
     return (
@@ -67,7 +61,12 @@ class SearchPage extends Component {
           onBlur={this.searchYT}
         />
         {this.state.videos.length === 0 ? (
-          <View />
+          <ActivityIndicator
+            style={styles.spinner}
+            animating={true}
+            color={Colors.red800}
+            size={'large'}
+          />
         ) : this.state.loading === false ? (
           <FlatList
             data={this.state.videos}
@@ -90,7 +89,11 @@ class SearchPage extends Component {
           />
         ) : (
           <View style={styles.spinner}>
-            <ActivityIndicator size="large" color="#0000ff" />
+            <ActivityIndicator
+              animating={true}
+              color={Colors.red800}
+              size={'large'}
+            />
           </View>
         )}
       </View>
