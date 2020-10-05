@@ -7,6 +7,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import ImagePicker from 'react-native-image-picker';
+import storage from '@react-native-firebase/storage';
 
 const date = 0;
 const dateDisplay = new Date();
@@ -21,6 +22,7 @@ export default class SignUp extends Component {
     birth_date: this.getParsedDate(date),
     picture: '',
     showDate: false,
+    localPath: '',
   };
 
   componentWillUnmount() {
@@ -103,6 +105,18 @@ export default class SignUp extends Component {
       .then((response) => {
         const uid = response.user.uid;
 
+        //upload profile picture
+        if (this.state.localPath !== '') {
+          storage()
+            .ref('/' + uid + '/profile_pic')
+            .putFile(this.state.localPath.toString())
+            .then((snapshot) => {
+              //You can check the image is now uploaded in the storage bucket
+              console.log(`image has been successfully uploaded.`);
+            })
+            .catch((e) => console.log('uploading image error => ', e));
+        }
+
         let account = {};
         account.id = response.user.uid;
         account.gender = this.state.gender;
@@ -146,7 +160,7 @@ export default class SignUp extends Component {
         console.log('User tapped custom button: ');
       } else {
         const source = {uri: response.uri};
-        this.setState({picture: source});
+        this.setState({picture: source, localPath: response.path});
         console.log(this.state.picture);
       }
     });
@@ -160,10 +174,7 @@ export default class SignUp extends Component {
           style={styles.profilePicture}
           onPress={this.selectPicture}>
           {this.state.picture === '' ? (
-            <Avatar.Image
-              size={140}
-              source={require('./profile_picture_icon.png')}
-            />
+            <Avatar.Image size={140} source={require('./icon.jpg')} />
           ) : (
             <Avatar.Image size={140} source={this.state.picture} />
           )}
