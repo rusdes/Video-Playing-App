@@ -13,6 +13,7 @@ export default class ListItem extends Component {
           this.props.onPress(
             this.props.item1.snippet.title,
             this.props.item1.id.videoId,
+            this.props.item1,
           )
         }>
         <View>

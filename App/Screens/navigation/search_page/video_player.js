@@ -3,6 +3,8 @@ import {Appbar, Button, IconButton, Colors} from 'react-native-paper';
 import {StyleSheet, Text, View} from 'react-native';
 import {KEY} from '../../../api_call';
 import YouTube from 'react-native-youtube';
+import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 
 export default class VideoPlayer extends Component {
   constructor(props) {
@@ -10,8 +12,79 @@ export default class VideoPlayer extends Component {
   }
 
   state = {
-    fav: true,
+    fav: false,
   };
+
+  setFavButton = async () => {
+    let uid = auth().currentUser.uid;
+    const usersRef = firestore().collection('users');
+    await usersRef
+      .doc(uid)
+      .get()
+      .then((firestoreDocument) => {
+        if (!firestoreDocument.exists) {
+          alert('User does not exist anymore.');
+          return;
+        }
+        let favouritesList = firestoreDocument.data()['favourites'];
+        return favouritesList;
+      })
+      .then((favouritesList) => {
+        console.log('fav: ' + typeof favouritesList);
+        if (favouritesList.includes(this.props.route.params.item)) {
+          return true;
+        } else {
+          return false;
+        }
+      })
+      .then((x) => {
+        if (x) {
+          this.setState({fav: true});
+        } else {
+          this.setState({fav: false});
+        }
+      });
+  };
+
+  addToFav = async () => {
+    let uid = auth().currentUser.uid;
+    const usersRef = firestore().collection('users');
+    await usersRef
+      .doc(uid)
+      .update({
+        favourites: firestore.FieldValue.arrayUnion(
+          this.props.route.params.item,
+        ),
+      })
+      .then(() => {
+        this.setState({fav: true});
+      });
+  };
+  removeFromFav = async () => {
+    let uid = auth().currentUser.uid;
+    const usersRef = firestore().collection('users');
+    await usersRef
+      .doc(uid)
+      .update({
+        favourites: firestore.FieldValue.arrayRemove(
+          this.props.route.params.item,
+        ),
+      })
+      .then(() => {
+        this.setState({fav: false});
+      });
+  };
+
+  componentDidMount() {
+    this.setFavButton();
+  }
+
+  componentWillUnmount() {
+    // fix Warning: Can't perform a React state update on an unmounted component
+    this.setState = (state, callback) => {
+      return;
+    };
+  }
 
   render() {
     const {navigation} = this.props;
@@ -45,7 +118,7 @@ export default class VideoPlayer extends Component {
               color={Colors.red400}
               size={60}
               onPress={() => {
-                this.setState({fav: false});
+                this.removeFromFav();
               }}
             />
           ) : (
@@ -55,7 +128,7 @@ export default class VideoPlayer extends Component {
               color={Colors.white}
               size={60}
               onPress={() => {
-                this.setState({fav: true});
+                this.addToFav();
               }}
             />
           )}

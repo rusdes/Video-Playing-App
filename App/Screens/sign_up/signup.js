@@ -125,6 +125,7 @@ export default class SignUp extends Component {
         account.password = this.state.password;
         account.email = this.state.email.toLowerCase();
         account.picture = this.state.picture;
+        account.favourites = [];
 
         const usersRef = firestore().collection('users');
         usersRef
