@@ -26,18 +26,19 @@ export default class VideoPlayer extends Component {
           alert('User does not exist anymore.');
           return;
         }
-        let favouritesList = firestoreDocument.data()['favourites'];
-        return favouritesList;
+        let favVideosList = firestoreDocument.data()['favVideos'];
+        return favVideosList;
       })
-      .then((favouritesList) => {
-        console.log('fav: ' + typeof favouritesList);
-        if (favouritesList.includes(this.props.route.params.item)) {
+      .then((favVideosList) => {
+        console.log('fav: ' + favVideosList);
+        if (favVideosList.includes(this.props.route.params.videoId)) {
           return true;
         } else {
           return false;
         }
       })
       .then((x) => {
+        console.log(x);
         if (x) {
           this.setState({fav: true});
         } else {
@@ -55,6 +56,9 @@ export default class VideoPlayer extends Component {
         favourites: firestore.FieldValue.arrayUnion(
           this.props.route.params.item,
         ),
+        favVideos: firestore.FieldValue.arrayUnion(
+          this.props.route.params.videoId,
+        ),
       })
       .then(() => {
         this.setState({fav: true});
@@ -68,6 +72,9 @@ export default class VideoPlayer extends Component {
       .update({
         favourites: firestore.FieldValue.arrayRemove(
           this.props.route.params.item,
+        ),
+        favVideos: firestore.FieldValue.arrayRemove(
+          this.props.route.params.videoId,
         ),
       })
       .then(() => {
