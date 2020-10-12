@@ -19,24 +19,21 @@ class Favourites extends Component {
     this.getFavs();
   }
 
-  getFavs = async () => {
+  getFavs = async() => {
     let uid = auth().currentUser.uid;
     const usersRef = firestore().collection('users');
-    await usersRef
+    usersRef
       .doc(uid)
-      .get()
-      .then((firestoreDocument) => {
-        if (!firestoreDocument.exists) {
-          alert('User does not exist anymore.');
-          return;
-        }
-        let favouritesList = firestoreDocument.data()['favourites'];
-        return favouritesList;
-      })
-      .then((favouritesList) => {
-        this.setState({videos: favouritesList})
+      .onSnapshot((doc) => {
+        let favouritesList = doc.data()['favourites'];
+        console.log("Current favs: ", favouritesList);
+        this.set(favouritesList);
       })
   };
+
+  set = (x) => {
+    this.setState({ videos: x });
+  }
 
   state = {
     query: '',
@@ -103,8 +100,8 @@ const styles = StyleSheet.create({
   },
   text: {
     flex: 1,
-    flexDirection: 'column',
-    alignContent: 'center',
+    alignSelf: 'center',
+    alignItems: 'center',
     justifyContent: 'center',
   }
 });

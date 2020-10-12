@@ -76,10 +76,11 @@ class SearchPage extends Component {
                 <ListItem
                   key={item.etag}
                   item1={item}
-                  onPress={(x, y) =>
+                  onPress={(x, y, z) =>
                     navigation.navigate('Video', {
                       Title: x,
                       videoId: y,
+                      item: z,
                     })
                   }
                 />
