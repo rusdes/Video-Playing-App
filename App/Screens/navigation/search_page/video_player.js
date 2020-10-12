@@ -50,6 +50,7 @@ export default class VideoPlayer extends Component {
   addToFav = async () => {
     let uid = auth().currentUser.uid;
     const usersRef = firestore().collection('users');
+    this.setState({fav: true});
     await usersRef
       .doc(uid)
       .update({
@@ -60,13 +61,11 @@ export default class VideoPlayer extends Component {
           this.props.route.params.videoId,
         ),
       })
-      .then(() => {
-        this.setState({fav: true});
-      });
   };
   removeFromFav = async () => {
     let uid = auth().currentUser.uid;
     const usersRef = firestore().collection('users');
+    this.setState({fav: false});
     await usersRef
       .doc(uid)
       .update({
@@ -77,9 +76,6 @@ export default class VideoPlayer extends Component {
           this.props.route.params.videoId,
         ),
       })
-      .then(() => {
-        this.setState({fav: false});
-      });
   };
 
   componentDidMount() {
